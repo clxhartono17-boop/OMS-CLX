@@ -1,0 +1,11 @@
+{
+  "name": "CLX Operation Management System V8",
+  "description": "Enterprise BSS Operation Management System with full-stack Sheets data persistence, technician GPS evidence camera, interactive PM checklist, and Indonesia GIS map.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
