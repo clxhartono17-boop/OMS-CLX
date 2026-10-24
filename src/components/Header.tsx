@@ -21,6 +21,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   currentUser,
   onOpenAuthModal,
+  onOpenGASModal,
   activeTab,
   onSelectTab,
 }) => {
