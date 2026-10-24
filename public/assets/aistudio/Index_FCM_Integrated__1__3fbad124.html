@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>CLX Operation Management System V8</title>
+  <meta name="theme-color" content="#091a2e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   CLX OPERATION MANAGEMENT SYSTEM V8 - ULTRA MODERN ENTERPRISE DESIGN SYSTEM
+   Redesigned for: Fresh, Modern, Intuitive, Elegant, Professional, Original
+   Optimized for: Multi-Device & Smooth Android Field Technician Experience
+   Preserving 100% IDs, Classes, DOM Structure & Google Apps Script Logic
+   ========================================================================== */
+
+:root {
+  /* Brand Core Palette */
+  --navy: #0d213a;
+  --navy-dark: #071526;
+  --navy2: #14355a;
+  --navy3: #1c4777;
+  --green: #059669;
+  --green-dark: #047857;
+  --green-light: #10b981;
+  --green-soft: #ecfdf5;
+  --green-border: #a7f3d0;
+  
+  /* Modern Neutral Surfaces */
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --card-elevated: #ffffff;
+  --text: #0f172a;
+  --text-secondary: #334155;
+  --muted: #64748b;
+  --muted-light: #94a3b8;
+  --line: #e2e8f0;
+  --line-subtle: #f1f5f9;
+  --soft: #f8fafc;
+  
+  /* State & Accents */
+  --warn: #d97706;
+  --warn-dark: #b45309;
+  --danger: #dc2626;
+  --danger-dark: #b91c1c;
+  --info: #0284c7;
+  
+  /* Elevation & Shadows */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow: 0 10px 30px -4px rgba(15, 33, 58, 0.08), 0 4px 12px -2px rgba(15, 33, 58, 0.04);
+  --shadow-lg: 0 20px 40px -8px rgba(15, 33, 58, 0.12), 0 6px 18px -3px rgba(15, 33, 58, 0.06);
+  --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.18);
+  
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  
+  /* Transitions */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   ANDROID & MOBILE TOUCH OPTIMIZATIONS
+   ========================================================================== */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  overscroll-behavior-y: contain;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(at 100% 0%, rgba(13, 33, 58, 0.03) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(5, 150, 105, 0.03) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+.wrap {
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* ==========================================================================
+   APP HEADER - LUXURIOUS ENTERPRISE NAVY & EMERALD WITH COMPANY LOGO
+   ========================================================================== */
+.app-header {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #091a2e 0%, #0f2b4c 50%, #153860 100%);
+  color: #ffffff;
+  padding: 24px 30px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 16px 36px -8px rgba(9, 26, 46, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  margin-bottom: 22px;
+}
+
+.app-header::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, rgba(16, 185, 129, 0) 70%);
+  pointer-events: none;
+}
+
+.app-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent 0%, #10b981 30%, #38bdf8 70%, transparent 100%);
+  opacity: 0.85;
+}
+
+.brand-mark {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 5px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(255, 255, 255, 0.25);
+  transition: transform 0.3s var(--ease);
+  overflow: hidden;
+}
+
+.brand-mark:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-fallback {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.75px;
+  background: linear-gradient(135deg, #0d213a 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.header-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: #6ee7b7;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  padding: 3px 10px;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+}
+
+.header-tag::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #34d399;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #34d399;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(20px, 2.7vw, 30px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+h1 span {
+  display: inline-block;
+  font-size: 0.6em;
+  padding: 3px 10px;
+  vertical-align: middle;
+  background: rgba(52, 211, 153, 0.16);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: 9999px;
+  color: #6ee7b7 !important;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-left: 6px;
+}
+
+.sub {
+  color: #cbd5e1;
+  margin: 7px 0 0;
+  font-size: 13.5px;
+  font-weight: 450;
+  letter-spacing: -0.15px;
+}
+
+/* ==========================================================================
+   CARDS & SECTIONS
+   ========================================================================== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px 26px;
+  margin: 18px 0;
+  box-shadow: var(--shadow);
+  min-width: 0;
+  transition: box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
+  position: relative;
+}
+
+.card:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-lg);
+}
+
+h2 {
+  font-size: 17.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0 0 16px;
+  letter-spacing: -0.3px;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+}
+
+section .card h2:before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--green-light) 0%, var(--green-dark) 100%);
+  margin-right: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+}
+
+/* ==========================================================================
+   GRID & ROW LAYOUTS
+   ========================================================================== */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.row > * {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.row:first-child {
+  margin-top: 0;
+}
+
+.row:last-child {
+  margin-bottom: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   FORM CONTROLS (INPUT, SELECT, TEXTAREA)
+   ========================================================================== */
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: 14px;
+  transition: var(--ease);
+  touch-action: manipulation;
+}
+
+input, select, textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  width: 100%;
+  background: #ffffff;
+  color: var(--text);
+  outline: none;
+  min-height: 48px; /* Ergonomic 48px target for touch */
+  box-shadow: var(--shadow-xs);
+  font-weight: 500;
+  transition: all 0.2s var(--ease);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--muted-light);
+  font-weight: 400;
+}
+
+input:hover, select:hover, textarea:hover {
+  border-color: #94a3b8;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #10b981;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16), 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+input[readonly] {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #475569;
+  cursor: not-allowed;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13.5px;
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+input[type="checkbox"] {
+  width: 22px;
+  min-height: 22px;
+  height: 22px;
+  accent-color: var(--green);
+  cursor: pointer;
+  margin: 0;
+  vertical-align: middle;
+  border-radius: 6px;
+}
+
+input[type="file"] {
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  color: #475569;
+}
+
+input[type="file"]:hover {
+  background: #f1f5f9;
+  border-color: var(--green);
+}
+
+input[type="file"]::file-selector-button {
+  background: #e2e8f0;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--navy);
+  margin-right: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: #cbd5e1;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.6;
+  font-family: inherit;
+}
+
+/* ==========================================================================
+   BUTTONS - ERGONOMIC FOR ANDROID FINGERS
+   ========================================================================== */
+button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  min-height: 48px; /* Smooth finger touch target */
+  white-space: normal;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.22), 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.18s var(--ease);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button:hover {
+  background: linear-gradient(180deg, #059669 0%, #047857 100%);
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3);
+}
+
+button:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 3px rgba(5, 150, 105, 0.2);
+}
+
+button.secondary {
+  background: #ffffff;
+  color: var(--navy);
+  border: 1px solid #cbd5e1;
+  box-shadow: var(--shadow-xs);
+}
+
+button.secondary:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #071526;
+  box-shadow: var(--shadow-sm);
+}
+
+button.secondary:active {
+  background: #e2e8f0;
+  transform: scale(0.98);
+}
+
+button.warn {
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.25);
+}
+
+button.warn:hover {
+  background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35);
+}
+
+button.danger {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+}
+
+button.danger:hover {
+  background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+  filter: grayscale(20%);
+}
+
+/* ==========================================================================
+   STATUS & ALERTS
+   ========================================================================== */
+.status {
+  position: relative;
+  padding: 14px 18px 14px 44px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #14532d;
+  border-radius: var(--radius-md);
+  margin-top: 16px;
+  overflow-wrap: anywhere;
+  font-size: 13.5px;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(22, 101, 52, 0.05);
+  display: flex;
+  align-items: center;
+}
+
+.status::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.status.busy {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.05);
+}
+
+.status.busy::before {
+  background: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  animation: pulse 1.5s infinite;
+}
+
+.status.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+  box-shadow: 0 2px 6px rgba(185, 28, 28, 0.05);
+}
+
+.status.error::before {
+  background: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.status.success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #14532d;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* ==========================================================================
+   IDENTITY CARD (USER INFO)
+   ========================================================================== */
+.identity-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-bottom: 4px;
+}
+
+.identity-copy {
+  flex: 1 1 280px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.identity-copy b {
+  font-size: 16.5px;
+  font-weight: 750;
+  color: var(--navy);
+  letter-spacing: -0.2px;
+}
+
+.identity-copy .note {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.identity-actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.identity-actions button {
+  min-width: 120px;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   KPI STATS TILES
+   ========================================================================== */
+.kpi {
+  position: relative;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  min-width: 0;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  overflow: hidden;
+}
+
+.kpi::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10b981 0%, #0284c7 100%);
+  opacity: 0.9;
+}
+
+.kpi:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  border-color: #cbd5e1;
+}
+
+.kpi b {
+  display: block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-top: 8px;
+  color: var(--navy);
+  letter-spacing: -0.8px;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   TOOLBARS
+   ========================================================================== */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+}
+
+.toolbar button {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.toolbar .left-tools {
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.toolbar .note {
+  margin: 0;
+  font-weight: 600;
+  color: var(--navy2);
+  background: #e2e8f0;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   DATA TABLES & SMOOTH SCROLL CONTAINER (MOMENTUM SCROLL ON ANDROID)
+   ========================================================================== */
+.scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 520px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  background: #ffffff;
+  -webkit-overflow-scrolling: touch; /* Momentum iOS/Android scrolling */
+}
+
+/* Custom Scrollbar */
+.scroll::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+.scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 860px;
+  background: #ffffff;
+  font-size: 13.5px;
+}
+
+th, td {
+  padding: 13px 15px;
+  border-bottom: 1px solid #f1f5f9;
+  text-align: left;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+th {
+  background: linear-gradient(180deg, #0f233a 0%, #0d1e33 100%);
+  color: #f8fafc;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  font-size: 11.5px;
+  font-weight: 750;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(16, 185, 129, 0.4);
+}
+
+th:first-child {
+  border-top-left-radius: var(--radius-sm);
+}
+
+th:last-child {
+  border-top-right-radius: var(--radius-sm);
+}
+
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+tbody tr:hover {
+  background-color: #f0f7ff !important;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+td button {
+  padding: 8px 14px;
+  min-height: 38px;
+  font-size: 12.5px;
+  font-weight: 650;
+  border-radius: 6px;
+}
+
+td input, td select {
+  min-width: 140px;
+  padding: 7px 10px;
+  min-height: 38px;
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   UTILITIES & PILLS
+   ========================================================================== */
+.hidden {
+  display: none !important;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: #e2e8f0;
+  color: #1e293b;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+a {
+  color: #0284c7;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+a:hover {
+  color: #0369a1;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   ANDROID & MOBILE OPTIMIZATIONS (TABLETS & SMARTPHONES)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .wrap {
+    padding: 16px 14px;
+  }
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .card {
+    padding: 20px 18px;
+  }
+  .app-header {
+    padding: 20px 22px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Prevent iOS/Android zoom on focus by enforcing 16px inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  .wrap {
+    padding: 12px 10px 48px;
+  }
+
+  .app-header {
+    border-radius: var(--radius-md);
+    gap: 14px;
+    padding: 16px;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .brand-mark {
+    width: 52px;
+    height: 52px;
+    flex-basis: 52px;
+    border-radius: 12px;
+    padding: 4px;
+  }
+
+  .header-tag {
+    font-size: 9.5px;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+  }
+
+  h1 {
+    font-size: 19px;
+    line-height: 1.25;
+  }
+
+  .sub {
+    font-size: 11.5px;
+    margin-top: 4px;
+  }
+
+  .card {
+    padding: 16px 14px;
+    margin: 12px 0;
+    border-radius: var(--radius-md);
+  }
+
+  h2 {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .kpi {
+    padding: 14px 16px;
+  }
+
+  .kpi b {
+    font-size: 24px;
+  }
+
+  .identity-card {
+    align-items: flex-start;
+  }
+
+  .identity-actions {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .identity-actions button {
+    flex: 1;
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .row > * {
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  /* Technician action buttons on Android */
+  #tech .row button {
+    min-height: 50px;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    font-weight: 800;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .toolbar .left-tools {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .toolbar .left-tools button,
+  .toolbar > button {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .scroll {
+    max-height: 380px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Swipe hint for tables on mobile */
+  .scroll::after {
+    content: "👉 Geser tabel ke kanan/kiri";
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 6px;
+    background: #f8fafc;
+    border-top: 1px dashed var(--line);
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="app-header">
+    <div class="brand-mark" aria-label="CLX">
+      <img src="assets/aistudio/clx_launcher_icon_7f548a42.png" alt="CLX Logo" class="brand-img" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='grid';"><div class="brand-fallback" style="display:none">CLX</div>
+    </div>
+    <div class="brand-copy">
+      <div class="header-tag">CLX FIELD OPERATIONS</div>
+      <h1>Operation Management System <span>V8</span></h1>
+      <div class="sub">Trouble Ticket · Maintenance · Field Service Workflow</div>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="identity-card">
+      <div class="identity-copy">
+        <b id="who">Memuat identitas pengguna…</b>
+        <div id="roleLine" class="note">Memeriksa akses server.</div>
+      </div>
+      <div class="identity-actions">
+        <button class="secondary" onclick="init()">↻ Refresh</button>
+      </div>
+    </div>
+    <div id="globalMsg" class="status">Menghubungkan ke Google Apps Script…</div>
+  </div>
+
+  <section id="coord" class="hidden">
+    <div class="card">
+      <h2>1. Upload File Customer &amp; Create TT</h2>
+      <div class="row">
+        <input id="file" type="file" accept=".xlsx,.xls">
+        <button onclick="upload()">UPLOAD &amp; RECONCILE</button>
+      </div>
+      <div id="uploadMsg" class="status">Upload hanya memproses SiteList dan dua sheet resmi Unavailable.</div>
+    </div>
+
+    <div class="card">
+      <h2>2. TT Outstanding yang Belum Di-assign</h2>
+      <div class="toolbar">
+        <div class="left-tools">
+          <button onclick="bulkAssignTT()">Bulk Assign Terpilih</button>
+          <span id="bulkCount" class="note">0 TT dipilih</span>
+        </div>
+        <button onclick="loadUnassignedTT()" class="secondary">Refresh TT Queue ↻</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAllTT" onchange="toggleAllTT(this.checked)" aria-label="Pilih semua TT"></th>
+              <th>TT ID</th>
+              <th>Site</th>
+              <th>Serial</th>
+              <th>Issue</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Mitra</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="unassignedRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Bulk WhatsApp Manual per Mitra</h2>
+      <div class="row">
+        <select id="waMitra"></select>
+        <button onclick="makeWA()">Generate Bulk WhatsApp</button>
+        <button class="secondary" onclick="copyWA()">Copy</button>
+      </div>
+      <textarea id="waText" placeholder="Pesan bulk akan muncul di sini"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>4. Review Laporan TT / PM</h2>
+      <div class="toolbar">
+        <button class="secondary" onclick="loadTasks()">Refresh Task ↻</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Jenis</th>
+              <th>Site</th>
+              <th>Mitra</th>
+              <th>Teknisi</th>
+              <th>Status</th>
+              <th>Laporan / Evidence</th>
+              <th>Review</th>
+            </tr>
+          </thead>
+          <tbody id="reviewRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>5. PM Site Assignment</h2>
+      <p class="note">Pilih site yang belum selesai di-PM pada siklus tanggal 15–15. Penugasan Coordinator akan tercatat di Workflow Tasks.</p>
+      <div class="toolbar">
+        <button class="secondary" onclick="loadPMCandidates()">Refresh Site Belum PM ↻</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Site</th>
+              <th>Serial</th>
+              <th>Station</th>
+              <th>Mitra</th>
+              <th>Operational</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="coordPMRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="mitra" class="hidden">
+    <div class="card">
+      <h2>Dashboard Mitra</h2>
+      <div id="mitraKPI" class="grid"></div>
+    </div>
+
+    <div class="card">
+      <h2>Daftarkan Akun Teknisi</h2>
+      <div class="row">
+        <input id="techName" placeholder="Nama teknisi">
+        <input id="techEmail" type="email" placeholder="Email Google teknisi">
+        <button onclick="registerTech()">Daftarkan Teknisi</button>
+      </div>
+      <div class="note">Teknisi otomatis diikat ke Mitra akun Team Leader. Email harus unik dan akun harus aktif di User Master.</div>
+    </div>
+
+    <div class="card">
+      <h2>Task Mitra &amp; Penugasan Teknisi</h2>
+      <div class="toolbar">
+        <button class="secondary" onclick="loadTasks()">Refresh Task ↻</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Jenis</th>
+              <th>Site</th>
+              <th>Status</th>
+              <th>Pilih Teknisi</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="mitraTaskRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>PM Mandiri — Site Belum PM</h2>
+      <p class="note">Team Leader dapat memulai PM untuk site yang dipetakan ke Mitranya tanpa menunggu penugasan Coordinator.</p>
+      <div class="toolbar">
+        <button class="secondary" onclick="loadPMCandidates()">Refresh Site Belum PM ↻</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Site</th>
+              <th>Serial</th>
+              <th>Station</th>
+              <th>Operational</th>
+              <th>Periode</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="mitraPMRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech" class="hidden">
+    <div class="card">
+      <h2>Task Saya — TT &amp; PM</h2>
+      <button class="secondary" onclick="loadTasks()">Refresh Task</button>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Jenis</th>
+              <th>Site</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="techTaskRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Proses Task / Submit Report</h2>
+      <input id="taskId" placeholder="Task ID" readonly>
+      <div class="row">
+        <button onclick="techAction('ACCEPT')">ACCEPT</button>
+        <button onclick="techAction('ON_THE_WAY')">ON THE WAY</button>
+      </div>
+      <div class="row">
+        <label>Foto Clock In/Out (kamera HP)</label><input id="clockCamera" type="file" accept="image/*" capture="environment">
+        <button onclick="techAction('CHECK_IN')">CLOCK IN — Timestamp + GPS</button>
+        <button class="secondary" onclick="techAction('CHECK_OUT')">CLOCK OUT — Timestamp + GPS</button>
+      </div>
+      <div class="note">Clock In/Out mengambil timestamp server dan GPS perangkat. Izin lokasi wajib aktif. Foto progress hanya melalui kamera perangkat; maksimal 6 foto per task.</div>
+      <div class="row">
+        <label>Foto Progress CM (maks. 6 foto, kamera HP)</label>
+        <input id="progressCamera" type="file" accept="image/*" capture="environment" multiple>
+        <button class="secondary" onclick="uploadProgressPhotos()">Ambil/Upload Foto Progress</button>
+      </div>
+      <div id="progressPhotoStatus" class="note">Belum ada foto progress diunggah.</div>
+      <div class="row">
+        <input id="issueDetail" placeholder="Detail Issue (wajib)">
+        <input id="rca1" placeholder="RCA 1 (wajib)">
+        <input id="rca2" placeholder="RCA 2 (wajib)">
+      </div>
+      <div class="row">
+        <input id="corrective" placeholder="Corrective Action (wajib)">
+        <input id="report" placeholder="Ringkasan laporan CM">
+      </div>
+      <div class="row">
+        <select id="cmStatus"><option value="">Status CM (opsional)</option><option>Pending</option><option>Need Replacement Part</option><option>Need Replacement Material</option></select>
+        <input id="cmNote" placeholder="Note (opsional)">
+      </div>
+      <textarea id="pmChecklist" placeholder="Checklist PM: satu item per baris, format Item | OK/NG/NA | Remarks"></textarea>
+      <div class="row">
+        <button class="secondary" onclick="techAction('SAVE_PROGRESS')">Simpan Progress CM</button>
+        <button onclick="techAction('SUBMIT')">Submit CM untuk Review</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="legacy" class="hidden">
+    <div class="card">
+      <h2>Dashboard &amp; Monitoring</h2>
+      <div id="kpi" class="grid"></div>
+      <button class="secondary" onclick="loadLegacy()">Refresh Monitoring</button>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>TT</th>
+              <th>Site</th>
+              <th>Mitra</th>
+              <th>Priority</th>
+              <th>Issue</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="legacyRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+
+// FCM bridge: token berasal dari aplikasi Flutter, identitas akun ditentukan backend.
+window.onClxFcmToken = function(token) {
+  if (!token || typeof token !== 'string' || token.length < 40) return;
+  if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+  google.script.run
+    .withSuccessHandler(function(result) {
+      console.log('CLX_FCM_REGISTERED:', result && result.ok ? 'SUCCESS' : 'UNKNOWN');
+    })
+    .withFailureHandler(function(error) {
+      console.warn('CLX_FCM_REGISTER_FAILED:', error && error.message ? error.message : error);
+    })
+    .registerFcmToken(token);
+};
+let pendingCalls=0;
+function setGlobalMessage(message,type='success') { const el=$('globalMsg'); if(!el)return; el.textContent=message; el.className='status '+type; }
+function setBusy(on){document.querySelectorAll('button').forEach(b=>{if(on){if(!b.dataset.wasDisabled)b.dataset.wasDisabled=b.disabled?'1':'0';b.disabled=true;}else{b.disabled=b.dataset.wasDisabled==='1';delete b.dataset.wasDisabled;}});}
+function run(n,a,ok){
+  pendingCalls++; setBusy(true); setGlobalMessage('Memproses: '+n+'…','busy');
+  const finish=()=>{pendingCalls=Math.max(0,pendingCalls-1);if(pendingCalls===0)setBusy(false);};
+  if(typeof google==='undefined'||!google.script||!google.script.run){
+    console.warn('google.script.run tidak tersedia (lingkungan non-GAS).');
+    setGlobalMessage('Tidak terhubung ke Google Apps Script. Buka aplikasi melalui URL Web App /exec untuk menjalankan '+n+'.','error');
+    finish();
+    return;
+  }
+  const runner=google.script.run.withSuccessHandler(result=>{try{setGlobalMessage('Berhasil: '+n,'success');if(ok)ok(result);}catch(e){setGlobalMessage('ERROR saat menampilkan hasil '+n+': '+(e.message||e),'error');console.error(e);}finally{finish();}}).withFailureHandler(e=>{setGlobalMessage('GAGAL: '+n+' — '+(e&&e.message?e.message:e),'error');console.error(n,e);finish();});
+  try { if(a===undefined)runner[n](); else runner[n](a); } catch(e){setGlobalMessage('GAGAL: '+n+' — '+(e.message||e),'error');finish();}
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function init(){run('getMyContext',null,u=>{ $('who').textContent=u.name+' ('+u.email+')';$('roleLine').textContent='Role: '+u.role+(u.mitra?' · Mitra: '+u.mitra:'')+' · '+u.version;$('globalMsg').textContent='Akses terverifikasi.';['coord','mitra','tech','legacy'].forEach(x=>$(x).classList.add('hidden'));if(u.role==='Coordinator'||u.role==='Admin')$('coord').classList.remove('hidden');if(u.role==='Mitra')$('mitra').classList.remove('hidden');if(u.role==='Technician')$('tech').classList.remove('hidden');loadTasks();if(u.role==='Coordinator'||u.role==='Admin'){loadUnassignedTT();loadMitraOptions();loadPMCandidates();}if(u.role==='Mitra')loadMitraDashboard();});}
+function upload(){const f=$('file').files[0];if(!f)return alert('Pilih file customer terlebih dahulu.');const r=new FileReader();r.onload=()=>run('uploadCustomerFile',{name:f.name,mimeType:f.type,data:r.result.split(',')[1]},x=>{ $('uploadMsg').textContent='File diterima. Batch '+x.batch+'; SiteList '+x.rows+' rows; TT with battery '+x.withBatteryTT+'; without battery '+x.withoutBatteryTT+'. Memproses…';run('processBSSUpload',x.batch,y=>{$('uploadMsg').textContent='Rekonsiliasi selesai: '+JSON.stringify(y);loadUnassignedTT();loadLegacy();});});r.readAsDataURL(f);}
+function loadMitraOptions(){run('getMitraOptions',null,a=>{$('waMitra').innerHTML=a.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');});}
+let unassignedCache=[];
+function updateBulkCount(){const n=document.querySelectorAll('.tt-select:checked').length;if($('bulkCount'))$('bulkCount').textContent=n+' TT dipilih';}
+function toggleAllTT(checked){document.querySelectorAll('.tt-select').forEach(c=>c.checked=checked);updateBulkCount();}
+function loadUnassignedTT(){setGlobalMessage('Memuat antrean TT…','busy');run('coordinatorTTQueue',null,a=>{unassignedCache=Array.isArray(a)?a:[];$('unassignedRows').innerHTML=unassignedCache.map((x,i)=>'<tr><td><input class="tt-select" type="checkbox" data-index="'+i+'" onchange="updateBulkCount()" aria-label="Pilih TT '+esc(x.ttId)+'"></td><td>'+esc(x.ttId)+'</td><td>'+esc(x.site)+'</td><td>'+esc(x.cabinet)+'</td><td>'+esc(x.issue)+'</td><td>'+esc(x.priority)+'</td><td>'+esc(x.status)+'</td><td>'+esc(x.mitra||'Belum ada mapping')+'</td><td><button data-tt-id="'+esc(x.ttId)+'" data-mitra="'+esc(x.mitra||'')+'" onclick="assignTT(this.dataset.ttId,this.dataset.mitra)">Assign</button></td></tr>').join('');if(!unassignedCache.length)$('unassignedRows').innerHTML='<tr><td colspan="9">Tidak ada TT outstanding yang belum di-assign.</td></tr>';$('selectAllTT').checked=false;updateBulkCount();setGlobalMessage('Antrean TT dimuat: '+unassignedCache.length+' TT belum di-assign.','success');});}
+function bulkAssignTT(){const selected=[...document.querySelectorAll('.tt-select:checked')].map(c=>unassignedCache[Number(c.dataset.index)]).filter(Boolean);if(!selected.length){setGlobalMessage('Pilih minimal satu TT untuk Bulk Assign.','error');return;}const missing=selected.filter(x=>!x.mitra);if(missing.length){setGlobalMessage('Bulk Assign dibatalkan: '+missing.length+' TT tidak memiliki mapping Mitra pada antrean. Perbaiki Team Lead di Site Master terlebih dahulu.','error');return;}if(!confirm('Assign '+selected.length+' TT ke Mitra sesuai mapping Site Master?'))return;run('coordinatorBulkAssignTT',{items:selected.map(x=>({ttId:x.ttId,mitra:x.mitra}))},r=>{const ok=(r.results||[]).filter(x=>x.ok).length,failed=(r.results||[]).filter(x=>!x.ok);let msg='Bulk Assign selesai: '+ok+' berhasil, '+failed.length+' gagal.';if(failed.length)msg+=' Detail: '+failed.map(x=>x.ttId+': '+x.error).join(' | ');setGlobalMessage(msg,failed.length?'error':'success');loadUnassignedTT();loadTasks();});}
+function assignTT(id,mitra){const opts=[...$('waMitra').options].map(o=>o.value);let selected=mitra||opts[0]||'';const chosen=prompt('Masukkan nama Mitra sesuai mapping Site Master:',selected);if(!chosen)return;run('coordinatorAssignTT',{ttId:id,mitra:chosen},r=>{alert('TT ditugaskan. Task ID: '+r.taskId);loadUnassignedTT();loadTasks();});}
+function makeWA(){const m=$('waMitra').value;if(!m)return alert('Belum ada pilihan Mitra.');run('generateBulkWhatsApp',m,x=>{if(!x.ok){$('waText').value=x.message;return;} $('waText').value=x.message;});}
+function copyWA(){if(!$('waText').value){setGlobalMessage('Tidak ada teks Bulk WhatsApp untuk disalin.','error');return;} navigator.clipboard.writeText($('waText').value).then(()=>setGlobalMessage('Bulk WhatsApp berhasil disalin.','success')).catch(()=>setGlobalMessage('Clipboard tidak tersedia; salin teks secara manual.','error'));}
+function normalizeTaskListResponse(result){
+  if(Array.isArray(result)) return result;
+  if(result && typeof result==='object'){
+    for(const key of ['tasks','data','items','rows','results','records']){
+      if(Array.isArray(result[key])) return result[key];
+    }
+  }
+  return null;
+}
+function loadTasks() {
+  setGlobalMessage('Memuat task untuk pengguna aktif…', 'busy');
+  run('myTaskList', undefined, function(result) {
+    const tasks = normalizeTaskListResponse(result);
+    if (tasks === null) {
+      ['reviewRows', 'mitraTaskRows', 'techTaskRows'].forEach(function(id) {
+        const el = $(id);
+        if (el) el.innerHTML = '<tr><td colspan="8">Respons server tidak dikenali.</td></tr>';
+      });
+      setGlobalMessage('Respons myTaskList tidak dikenali.', 'error');
+      return;
+    }
+    const roleText = $('roleLine').textContent;
+    const isCoordinator = roleText.includes('Coordinator') || roleText.includes('Admin');
+    const isMitra = roleText.includes('Role: Mitra');
+
+    // Tabel review Coordinator
+    $('reviewRows').innerHTML = tasks.map(function(x) {
+      const id = esc(x['Task ID']);
+      const status = x.Status || '';
+      const reviewButtons = status === 'COMPLETED_WAITING_REVIEW'
+        ? '<button data-task-id="' + id + '" onclick="reviewTask(this.dataset.taskId,&#39;APPROVE&#39;)">Approve/Close</button> <button class="warn" data-task-id="' + id + '" onclick="reviewTask(this.dataset.taskId,&#39;REWORK&#39;)">Rework</button>'
+        : '';
+      return '<tr><td>' + id + '</td><td>' + esc(x['Task Type']) + '</td><td>' + esc(x['Site Name']) + '</td><td>' + esc(x['Mitra/Team']) + '</td><td>' + esc(x['Technician Name']) + '</td><td>' + esc(status) + '</td><td>' + esc(x['Report Summary'] || '') + '<br><a target="_blank" rel="noopener" href="' + esc(x['Check In Evidence URL'] || '#') + '">Check In</a> · <a target="_blank" rel="noopener" href="' + esc(x['Check Out Evidence URL'] || '#') + '">Check Out</a></td><td>' + reviewButtons + '</td></tr>';
+    }).join('') || '<tr><td colspan="8">Tidak ada task untuk ditampilkan.</td></tr>';
+
+    // Tabel task Mitra
+    $('mitraTaskRows').innerHTML = tasks.map(function(x) {
+      const id = esc(x['Task ID']);
+      return '<tr><td>' + id + '</td><td>' + esc(x['Task Type']) + '</td><td>' + esc(x['Site Name']) + '</td><td>' + esc(x.Status) + '</td><td><select id="tech_' + id + '"><option value="">Memuat teknisi…</option></select></td><td><button data-task-id="' + id + '" data-mitra="' + esc(x['Mitra/Team']) + '" onclick="assignTech(this.dataset.taskId,this.dataset.mitra)">Assign</button></td></tr>';
+    }).join('') || '<tr><td colspan="6">Tidak ada task untuk akun ini.</td></tr>';
+
+    // Tabel task Teknisi
+    $('techTaskRows').innerHTML = tasks.map(function(x) {
+      const id = esc(x['Task ID']);
+      const status = String(x.Status || '').toUpperCase();
+      const pmButton = x['Task Type'] === 'PM' && !['CLOSED', 'CANCELLED', 'COMPLETED_WAITING_REVIEW'].includes(status)
+        ? ' <button class="secondary" data-task-id="' + id + '" onclick="openPMForm(this.dataset.taskId)">Kerjakan PM</button>'
+        : '';
+      return '<tr><td>' + id + '</td><td>' + esc(x['Task Type']) + '</td><td>' + esc(x['Site Name']) + '</td><td>' + esc(x.Status) + '</td><td><button data-task-id="' + id + '" onclick="selectTask(this.dataset.taskId)">Pilih Task</button>' + pmButton + '</td></tr>';
+    }).join('') || '<tr><td colspan="5">Belum ada task untuk akun Teknisi ini.</td></tr>';
+
+    if (isCoordinator || isMitra) {
+      tasks.forEach(function(x) {
+        const id = 'tech_' + x['Task ID'];
+        const select = $(id);
+        if (!select) return;
+        run('listTechniciansForMitra', x['Mitra/Team'], function(response) {
+          const list = Array.isArray(response) ? response : (response && Array.isArray(response.technicians) ? response.technicians : []);
+          select.innerHTML = '<option value="">Pilih teknisi</option>' + list.map(function(t) { return '<option value="' + esc(t.email) + '">' + esc(t.name) + ' (' + esc(t.email) + ')</option>'; }).join('');
+          if (!list.length) select.innerHTML = '<option value="">Tidak ada teknisi aktif untuk Mitra ini</option>';
+        });
+      });
+    }
+    setGlobalMessage('Refresh Task selesai: ' + tasks.length + ' task diterima dari server.', 'success');
+  });
+}
+function assignTech(id,mitra){const el=$('tech_'+id);if(!el||!el.value)return alert('Pilih teknisi dahulu.');run('assignTaskTechnician',{taskId:id,technicianEmail:el.value},x=>{alert('Teknisi berhasil ditugaskan.');loadTasks();});}
+function reviewTask(id,decision){let remarks='';if(decision==='REWORK'){remarks=prompt('Alasan rework wajib diisi:','Mohon lengkapi laporan/evidence');if(!remarks)return;}else if(!confirm('Setujui laporan dan tutup task '+id+'?'))return;run('coordinatorReviewTask',{taskId:id,decision,remarks},x=>{alert('Review tersimpan: '+x.status);loadTasks();loadUnassignedTT();});}
+function loadPMCandidates(){setGlobalMessage('Memuat site yang belum PM…','busy');run('pmSiteCandidates',null,a=>{a=Array.isArray(a)?a:[];const rows=a.map(x=>'<tr><td>'+esc(x.siteName)+'</td><td>'+esc(x.cabinet)+'</td><td>'+esc(x.station)+'</td><td>'+esc(x.mitra)+'</td><td>'+esc(x.operational)+'</td><td><button data-site-key="'+esc(x.siteKey)+'" data-mitra="'+esc(x.mitra)+'" onclick="assignPM(this.dataset.siteKey,this.dataset.mitra)">Assign PM</button></td></tr>').join('');$('coordPMRows').innerHTML=rows||'<tr><td colspan="6">Tidak ada site yang perlu di-PM untuk siklus ini.</td></tr>';const mrows=a.map(x=>'<tr><td>'+esc(x.siteName)+'</td><td>'+esc(x.cabinet)+'</td><td>'+esc(x.station)+'</td><td>'+esc(x.operational)+'</td><td>'+esc(x.cycleStart)+' – '+esc(x.cycleEnd)+'</td><td><button data-site-key="'+esc(x.siteKey)+'" onclick="selfPM(this.dataset.siteKey)">Mulai PM Mandiri</button></td></tr>').join('');$('mitraPMRows').innerHTML=mrows||'<tr><td colspan="6">Tidak ada site yang perlu di-PM untuk siklus ini.</td></tr>';setGlobalMessage('Daftar site PM dimuat: '+a.length+' site tersedia.','success');});}
+function assignPM(siteKey,mitra){if(!mitra)return alert('Site belum memiliki mapping Mitra.');run('coordinatorAssignPM',{siteKey,mitra},x=>{alert('Task PM dibuat: '+x.taskId);loadPMCandidates();loadTasks();});}
+function selfPM(siteKey){run('startSelfPM',{siteKey},x=>{alert('PM mandiri dibuat: '+x.taskId);loadPMCandidates();loadTasks();});}
+function registerTech(){run('registerTechnician',{name:$('techName').value,email:$('techEmail').value},x=>{alert('Teknisi terdaftar untuk '+x.mitra);$('techName').value='';$('techEmail').value='';loadTasks();});}
+function loadMitraDashboard(){run('getMitraDashboard',null,d=>{$('mitraKPI').innerHTML=[['Total Task',d.total],['TT',d.tt],['PM',d.pm],['Outstanding',d.outstanding],['Waiting Review',d.waitingReview]].map(x=>'<div class="kpi">'+x[0]+'<b>'+x[1]+'</b></div>').join('');});}
+function selectTask(id){$('taskId').value=id;setGlobalMessage('Task dipilih: '+id+'. Silakan lanjutkan aksi teknisi.','success');}
+function openPMForm(id){run('getPMFormLaunchUrl',id,r=>{if(r&&r.url)window.open(r.url,'_blank');});}
+function getEvidenceGeo(){return new Promise((resolve,reject)=>{if(!navigator.geolocation)return reject(new Error('Browser tidak mendukung GPS/geolocation.'));navigator.geolocation.getCurrentPosition(p=>resolve({lat:p.coords.latitude,lon:p.coords.longitude,accuracy:p.coords.accuracy,at:new Date()}),e=>reject(new Error('GPS wajib diizinkan untuk evidence. '+(e.message||''))),{enableHighAccuracy:true,timeout:20000,maximumAge:0});});}
+function imageWithEvidenceStamp(file,geo){return new Promise((resolve,reject)=>{if(!file.type.startsWith('image/'))return reject(new Error('Evidence wajib berupa gambar agar timestamp dan geotag dapat ditempelkan.'));const reader=new FileReader();reader.onerror=()=>reject(new Error('Gagal membaca file gambar.'));reader.onload=()=>{const img=new Image();img.onerror=()=>reject(new Error('Format gambar tidak dapat diproses.'));img.onload=()=>{const max=2000,scale=Math.min(1,max/Math.max(img.width,img.height)),w=Math.round(img.width*scale),h=Math.round(img.height*scale),canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,w,h);const stampH=Math.max(76,Math.round(h*.11)),pad=Math.max(12,Math.round(w*.012)),font=Math.max(16,Math.round(w*.018));ctx.fillStyle='rgba(0,0,0,.78)';ctx.fillRect(0,h-stampH,w,stampH);ctx.fillStyle='#fff';ctx.font='bold '+font+'px Arial';ctx.textBaseline='top';const ts=geo.at.toLocaleString('id-ID',{timeZone:'Asia/Jakarta',hour12:false});ctx.fillText('CLX FIELD EVIDENCE | '+ts,pad,h-stampH+pad);ctx.font=Math.max(13,Math.round(font*.82))+'px Arial';ctx.fillText('GPS: '+geo.lat.toFixed(6)+', '+geo.lon.toFixed(6)+' | Accuracy ±'+Math.round(geo.accuracy)+' m',pad,h-stampH+pad+font+8);canvas.toBlob(blob=>{if(!blob)return reject(new Error('Gagal membuat gambar bertimestamp.'));resolve({blob,name:file.name.replace(/.[^.]+$/,'')+'_GEO.jpg',geo,ts});},'image/jpeg',.9);};img.src=reader.result;};reader.readAsDataURL(file);});}
+async function uploadProgressPhotos(){
+ const taskId=$('taskId').value,input=$('progressCamera'),files=[...(input.files||[])];
+ if(!taskId)return setGlobalMessage('Pilih task terlebih dahulu.','error');
+ if(!files.length)return setGlobalMessage('Gunakan kamera HP untuk mengambil foto progress CM.','error');
+ if(files.length>6)return setGlobalMessage('Maksimal 6 foto dalam satu pengambilan.','error');
+ try{
+  const geo=await getEvidenceGeo();
+  const existing=Number((($('progressPhotoStatus').dataset.count)||'0'));
+  if(existing+files.length>6)return setGlobalMessage('Maksimal 6 foto progress CM per task. Sudah tercatat '+existing+'.','error');
+  let uploaded=0;
+  for(const f of files){
+   const stamped=await imageWithEvidenceStamp(f,geo),reader=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(stamped.blob);});
+   const desc='CM_PROGRESS; Timestamp '+stamped.ts+'; GPS '+geo.lat.toFixed(6)+','+geo.lon.toFixed(6)+'; accuracy ±'+Math.round(geo.accuracy)+' m';
+   await new Promise((resolve,reject)=>{google.script.run.withSuccessHandler(x=>{uploaded++;resolve(x);}).withFailureHandler(reject).uploadTaskEvidence({taskId,name:stamped.name,mimeType:'image/jpeg',data:String(reader).split(',')[1],description:desc,evidenceType:'CM_PROGRESS'});});
+  }
+  $('progressPhotoStatus').dataset.count=String(existing+uploaded);$('progressPhotoStatus').textContent='Foto progress terunggah: '+(existing+uploaded)+'/6. Timestamp + geotag sudah ditempelkan.';input.value='';setGlobalMessage('Foto progress berhasil diunggah.','success');
+ }catch(e){setGlobalMessage('Gagal mengunggah foto progress: '+(e.message||e),'error');}
+}
+async function captureClockEvidence(action){
+ const taskId=$('taskId').value;if(!taskId)throw new Error('Pilih task terlebih dahulu.');
+ const geo=await getEvidenceGeo();
+ // Capture from camera input; clock event cannot use a manually typed URL.
+ const input=$('clockCamera');let file=(input.files||[])[0];
+ if(!file)throw new Error('Ambil satu foto menggunakan kamera HP terlebih dahulu untuk bukti Clock In/Out.');
+ const stamped=await imageWithEvidenceStamp(file,geo),dataUrl=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(stamped.blob);});
+ const uploaded=await new Promise((resolve,reject)=>{const runner=google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);runner.uploadTaskEvidence({taskId,name:stamped.name,mimeType:'image/jpeg',data:String(dataUrl).split(',')[1],description:action+'; Timestamp '+stamped.ts+'; GPS '+geo.lat.toFixed(6)+','+geo.lon.toFixed(6)+'; accuracy ±'+Math.round(geo.accuracy)+' m',evidenceType:action==='CHECK_IN'?'CLOCK_IN':'CLOCK_OUT'});});
+ return {location:geo.lat.toFixed(6)+','+geo.lon.toFixed(6)+' ±'+Math.round(geo.accuracy)+'m',evidenceUrl:uploaded.url};
+}
+async function techAction(action){const taskId=$('taskId').value;if(!taskId)return alert('Pilih Task dahulu.');const data={taskId,action,issueDetail:$('issueDetail').value,rca1:$('rca1').value,rca2:$('rca2').value,correctiveAction:$('corrective').value,reportSummary:$('report').value,pmChecklist:$('pmChecklist').value,cmStatus:$('cmStatus').value,note:$('cmNote').value};try{if(action==='CHECK_IN'||action==='CHECK_OUT'){setGlobalMessage('Mengambil timestamp dan geotag…','busy');Object.assign(data,await captureClockEvidence(action));}if(action==='SUBMIT'){if(!$('issueDetail').value.trim()||!$('rca1').value.trim()||!$('rca2').value.trim()||!$('corrective').value.trim())return setGlobalMessage('Detail Issue, RCA 1, RCA 2, dan Corrective Action wajib diisi.','error');}run('technicianUpdateTask',data,x=>{alert('Status tersimpan: '+x.status);loadTasks();});}catch(e){setGlobalMessage('Aksi dibatalkan: '+(e.message||e),'error');}}
+function loadLegacy(){run('getDashboard',null,d=>{$('kpi').innerHTML=[['Total Site',d.totalSite],['Today Condition',d.todayRows],['Today Customer TT',d.todayTT],['Outstanding',d.status.OUTSTANDING||0]].map(x=>'<div class="kpi">'+x[0]+'<b>'+x[1]+'</b></div>').join('');});run('getWorkQueue',null,a=>{$('legacyRows').innerHTML=a.map(x=>'<tr><td>'+esc(x.ttId)+'</td><td>'+esc(x.site)+'</td><td>'+esc(x.mitra)+'</td><td>'+esc(x.priority)+'</td><td>'+esc(x.issue)+'</td><td>'+esc(x.status)+'</td></tr>').join('');});}
+init();
+</script>
+</body>
+</html>

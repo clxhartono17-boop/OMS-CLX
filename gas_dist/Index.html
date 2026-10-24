@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>CLX Operation Management System V8</title>
+  <meta name="theme-color" content="#091a2e">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS for GIS Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              navy: '#091a2e',
+              dark: '#071526',
+              emerald: '#059669',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f7fb; }
+    .custom-pin {
+      width: 24px; height: 24px; border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg); border: 2px solid #ffffff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
+    }
+    .custom-pin-inner { width: 8px; height: 8px; background: #fff; border-radius: 50%; transform: rotate(45deg); }
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-[#f4f7fb] text-slate-900 antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- 1. TOP HEADER (3-ZONE CONTRACT) -->
+  <header class="bg-[#091a2e] text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
+      <!-- Zone 1: Brand Wordmark -->
+      <div class="flex items-center gap-3 shrink-0">
+        <div class="w-9 h-9 bg-emerald-600 rounded-lg flex items-center justify-center font-black text-white text-base shadow-sm tracking-tighter">
+          CLX
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-sm sm:text-base tracking-tight text-white whitespace-nowrap">
+            CLX Operation Management System
+          </span>
+          <span class="text-[11px] text-slate-400 font-mono tracking-wide -mt-0.5">
+            BSS V8.0 WORKFLOW
+          </span>
+        </div>
+      </div>
+
+      <!-- Zone 2: Navigation Links -->
+      <nav id="headerNav" class="hidden lg:flex items-center gap-5 text-xs font-semibold text-slate-300">
+        <!-- Rendered dynamically based on Role -->
+      </nav>
+
+      <!-- Zone 3: Active Profile Button -->
+      <div class="flex items-center gap-2 shrink-0">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap shadow-xs">
+          <div class="flex flex-col text-left">
+            <span id="userName" class="font-semibold text-white max-w-[130px] sm:max-w-[180px] truncate">
+              Memuat Pengguna…
+            </span>
+            <span id="userRoleLine" class="text-[10px] text-emerald-400 -mt-0.5 font-mono">
+              ROLE: CHECKING
+            </span>
+          </div>
+          <button onclick="refreshData()" title="Muat ulang data dari server" class="ml-1 text-slate-400 hover:text-white p-1">↻</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. ROLE SUB-NAVIGATION TABS -->
+  <div class="bg-white border-b border-slate-200 sticky top-16 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div id="subTabs" class="flex items-center gap-1 sm:gap-2 overflow-x-auto py-2 scrollbar-none">
+        <!-- Injected via JavaScript based on Role -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. MAIN WORKSPACE CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+    <!-- Active Role & Identity Banner -->
+    <div id="roleBanner" class="p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs bg-slate-900 border-slate-800 text-white">
+      <div class="flex items-center gap-3">
+        <div id="roleIconBox" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold text-lg">
+          🛡️
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="bannerUserName" class="font-bold text-sm tracking-tight">Memuat…</span>
+            <span id="bannerRoleTag" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              ROLE: -
+            </span>
+          </div>
+          <div id="bannerUserEmail" class="text-xs text-slate-300 mt-0.5 font-mono">
+            Memeriksa akun Google Spreadsheet…
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 self-end sm:self-auto">
+        <span id="bannerPermissions" class="hidden md:inline-block text-[11px] text-slate-300 font-mono">
+          Akses Terverifikasi
+        </span>
+        <button onclick="refreshData()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all flex items-center gap-1.5 whitespace-nowrap">
+          ↻ Refresh Data
+        </button>
+      </div>
+    </div>
+
+    <!-- Status Alert Bar -->
+    <div id="statusMsg" class="p-3 text-xs rounded-xl bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-between">
+      <span id="statusText">Menghubungkan ke Google Apps Script…</span>
+      <span id="statusTime" class="text-[10px] font-mono text-slate-400"></span>
+    </div>
+
+    <!-- ================= VIEW 1: KONSOL KOORDINATOR & ADMIN ================= -->
+    <div id="view_coord" class="space-y-6 hidden">
+      <!-- 1. Upload File Excel Customer -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-1 flex items-center gap-2">
+          <span class="text-emerald-600 font-black">📤</span> 1. Upload File Excel Customer &amp; Rekonsiliasi Otomatis
+        </h3>
+        <p class="text-xs text-slate-500 mb-4">
+          Unggah file Excel customer (`SiteList`, `With Battery Unavailable`, `Without Battery Unavailable`). Sistem merekonsiliasi site master dan menerbitkan Trouble Ticket baru.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <input id="excelFile" type="file" accept=".xlsx,.xls" class="text-xs border border-slate-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer">
+          <button onclick="handleUploadExcel()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2">
+            Upload &amp; Reconcile File Customer
+          </button>
+        </div>
+        <div id="uploadResult" class="mt-2 text-xs text-slate-600 hidden"></div>
+      </div>
+
+      <!-- 2. TT Outstanding Queue with SLA & Bulk Assign -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h3 class="font-bold text-sm text-slate-900">
+              2. Antrean Trouble Ticket Outstanding (<span id="ttCountBadge">0</span> Belum Di-assign)
+            </h3>
+            <p class="text-xs text-slate-500">
+              Pilih satu atau beberapa tiket untuk penugasan massal ke Mitra rekanan
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="handleBulkAssignTT()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs">
+              Bulk Assign Terpilih (<span id="selectedTTCount">0</span>)
+            </button>
+            <button onclick="loadUnassignedTT()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">
+              Refresh TT ↻
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-100 rounded-lg">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#0f233a] text-white uppercase text-[10px] tracking-wider">
+              <tr>
+                <th class="p-3 w-8"><input type="checkbox" id="selectAllTT" onchange="toggleSelectAllTT(this.checked)"></th>
+                <th class="p-3">TT ID</th>
+                <th class="p-3">Lokasi Site</th>
+                <th class="p-3">Kabinet / Station</th>
+                <th class="p-3">Issue Alarm</th>
+                <th class="p-3">Prioritas</th>
+                <th class="p-3">Target SLA 12 Jam</th>
+                <th class="p-3">Mitra Terpetakan</th>
+                <th class="p-3 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="unassignedRows" class="divide-y divide-slate-100">
+              <tr><td colspan="9" class="p-4 text-center text-slate-400">Memuat antrean Trouble Ticket…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. Bulk WhatsApp per Mitra (Direct wa.me link) -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-1 flex items-center gap-2">
+          <span class="text-emerald-600 font-black">💬</span> 3. Bulk WhatsApp Dispatch per Mitra (Direct WA Link)
+        </h3>
+        <p class="text-xs text-slate-500 mb-3">
+          Hasilkan draf pesan broadcast penugasan tiket standar CLX untuk dikirimkan ke Mitra.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 mb-3">
+          <select id="waMitraSelect" class="text-xs border border-slate-300 rounded-lg p-2 font-medium focus:ring-2 focus:ring-emerald-500"></select>
+          <button onclick="generateWhatsApp()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold">
+            Generate Template WA
+          </button>
+          <button onclick="copyWAText()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">
+            Copy Pesan
+          </button>
+          <a id="waDirectLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold hidden">
+            Buka di WhatsApp Web / App ↗
+          </a>
+        </div>
+
+        <textarea id="waText" rows="4" placeholder="Draf broadcast WhatsApp per mitra akan muncul di sini…" class="w-full text-xs font-mono border border-slate-200 rounded-lg p-3 bg-slate-50 focus:bg-white"></textarea>
+      </div>
+
+      <!-- 4. Review Laporan Lapangan -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-1 flex items-center gap-2">
+          <span class="text-emerald-600 font-black">✅</span> 4. Verifikasi &amp; Review Laporan Task (Menunggu Approval)
+        </h3>
+        <p class="text-xs text-slate-500 mb-4">Laporan pekerjaan teknisi yang telah di-submit beserta bukti foto GPS Clock In/Out.</p>
+
+        <div class="overflow-x-auto border border-slate-100 rounded-lg">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#0f233a] text-white uppercase text-[10px] tracking-wider">
+              <tr>
+                <th class="p-3">Task ID</th>
+                <th class="p-3">Jenis</th>
+                <th class="p-3">Site</th>
+                <th class="p-3">Mitra / Teknisi</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Laporan &amp; Bukti Foto</th>
+                <th class="p-3 text-right">Aksi Review</th>
+              </tr>
+            </thead>
+            <tbody id="reviewRows" class="divide-y divide-slate-100">
+              <tr><td colspan="7" class="p-4 text-center text-slate-400">Tidak ada task yang menunggu review.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5. PM 15-15 Assignment -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-1 flex items-center gap-2">
+          <span class="text-emerald-600 font-black">📅</span> 5. Penugasan Preventive Maintenance (PM) Siklus 15-15
+        </h3>
+        <div class="overflow-x-auto border border-slate-100 rounded-lg mt-3">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#0f233a] text-white uppercase text-[10px] tracking-wider">
+              <tr>
+                <th class="p-3">Site Location</th><th>Cabinet S/N</th><th>Station Code</th><th>Mitra Terpetakan</th><th>Status</th><th class="p-3 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="coordPMRows" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VIEW 2: MONITORING & KPI GLOBAL ================= -->
+    <div id="view_dashboard" class="space-y-6 hidden">
+      <!-- Top 6 KPI Metric Strip -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Total BSS Site</span>
+          <div id="kpiTotalSites" class="text-2xl font-black text-slate-900 mt-1 font-mono">0</div>
+          <span class="text-[11px] text-slate-400 mt-0.5 block">Master Aktif</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <span class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider block">✓ Available</span>
+          <div id="kpiAvailable" class="text-2xl font-black text-emerald-700 mt-1 font-mono">0</div>
+          <span class="text-[11px] text-slate-400 mt-0.5 block">Siap Swap Baterai</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <span class="text-[11px] font-bold text-red-600 uppercase tracking-wider block">✕ Unavailable</span>
+          <div id="kpiUnavailable" class="text-2xl font-black text-red-600 mt-1 font-mono">0</div>
+          <span class="text-[11px] text-slate-400 mt-0.5 block">Offline / Power Cut</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <span class="text-[11px] font-bold text-amber-600 uppercase tracking-wider block">⚡ Faulted Slot</span>
+          <div id="kpiFaulted" class="text-2xl font-black text-amber-600 mt-1 font-mono">0</div>
+          <span class="text-[11px] text-slate-400 mt-0.5 block">Degradasi Sebagian</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">⏱️ TT Outstanding</span>
+          <div id="kpiOutstanding" class="text-2xl font-black text-slate-900 mt-1 font-mono">0</div>
+          <span class="text-[11px] text-slate-400 mt-0.5 block">Belum Di-assign</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Siklus PM 15-15</span>
+          <div id="kpiCycle" class="text-xs font-bold text-slate-800 mt-2 font-mono">15 Okt – 15 Nov</div>
+          <span class="text-[10px] text-emerald-600 font-semibold mt-1 block">Periode Berjalan</span>
+        </div>
+      </div>
+
+      <!-- Mitra Performance Table -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-1">Performa Mitra Lapangan (SLA &amp; PM)</h3>
+        <p class="text-xs text-slate-500 mb-4">Pencapaian SLA 12 Jam, Task Solved, dan Realisasi PM Siklus Berjalan</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="border-b border-slate-200 text-slate-500 font-semibold uppercase text-[10px]">
+              <tr>
+                <th class="pb-2.5">Mitra / Tim</th><th class="pb-2.5 text-center">Total Site</th><th class="pb-2.5 text-center">Solved</th><th class="pb-2.5 text-center">Outstanding</th><th class="pb-2.5 text-center">SLA Met %</th><th class="pb-2.5 text-center">PM Achievement %</th><th class="pb-2.5 text-right">Skor</th>
+              </tr>
+            </thead>
+            <tbody id="mitraPerfRows" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VIEW 3: PORTAL MITRA (TEAM LEADER) ================= -->
+    <div id="view_mitra" class="space-y-6 hidden">
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-3">Dashboard Team Leader: <span id="mitraTitle"></span></h3>
+        <div id="mitraKpiCards" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"></div>
+      </div>
+
+      <!-- Daftarkan Teknisi -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-1">Daftarkan Akun Teknisi Baru</h3>
+        <p class="text-xs text-slate-500 mb-3">Teknisi otomatis terikat ke Mitra Anda di 08 USER MASTER.</p>
+        <div class="flex flex-col sm:flex-row items-stretch gap-3">
+          <input id="newTechName" placeholder="Nama Lengkap Teknisi" class="text-xs border border-slate-300 rounded-lg p-2.5 flex-1">
+          <input id="newTechEmail" type="email" placeholder="Email Google Teknisi" class="text-xs border border-slate-300 rounded-lg p-2.5 flex-1">
+          <button onclick="handleRegisterTech()" class="px-5 py-2.5 bg-slate-900 text-white rounded-lg text-xs font-bold">Daftarkan Teknisi</button>
+        </div>
+      </div>
+
+      <!-- Penugasan Task ke Teknisi -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-3">Penugasan Task ke Teknisi Tim</h3>
+        <div class="overflow-x-auto border border-slate-100 rounded-lg">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#0f233a] text-white uppercase text-[10px]">
+              <tr><th>Task ID</th><th>Jenis</th><th>Site</th><th>Status</th><th>Pilih Teknisi</th><th class="text-right">Aksi</th></tr>
+            </thead>
+            <tbody id="mitraTaskRows" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PM Mandiri -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-1">PM Mandiri (Site Terpetakan ke Mitra Anda)</h3>
+        <div class="overflow-x-auto border border-slate-100 rounded-lg mt-3">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#0f233a] text-white uppercase text-[10px]">
+              <tr><th>Site</th><th>Cabinet S/N</th><th>Station Code</th><th>Operational</th><th class="text-right">Aksi</th></tr>
+            </thead>
+            <tbody id="mitraPMRows" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VIEW 4: TASK LAPANGAN SAYA (TEKNISI) ================= -->
+    <div id="view_tech" class="space-y-6 hidden">
+      <!-- Task Selection -->
+      <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-2">Task Saya (TT &amp; PM)</h3>
+        <div id="techTaskCards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5"></div>
+      </div>
+
+      <!-- Step-by-Step Execution Card -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-5">
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+          <div>
+            <span class="text-xs font-mono font-bold" id="techSelectedTaskId">Pilih Task Di Atas</span>
+            <h4 class="text-base font-bold text-slate-900 mt-0.5" id="techSelectedSiteName">-</h4>
+          </div>
+          <span id="techSelectedStatus" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">-</span>
+        </div>
+
+        <!-- Langkah 1 -->
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Langkah 1: Respon Penugasan</span>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="handleTechAction('ACCEPT')" class="min-h-[46px] bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold">1. ACCEPT</button>
+            <button onclick="handleTechAction('ON_THE_WAY')" class="min-h-[46px] bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold">2. ON THE WAY</button>
+          </div>
+        </div>
+
+        <!-- Langkah 2: Clock In & Clock Out with GPS Watermark -->
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Langkah 2: Clock In &amp; Out (Kamera HP + GPS Watermark)</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <span class="text-xs font-semibold block text-slate-700">Foto Clock In:</span>
+              <input type="file" id="cameraClockIn" accept="image/*" capture="environment" class="text-xs w-full">
+              <button onclick="handleClockWithCamera('CHECK_IN')" class="w-full min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold">
+                CLOCK IN + STAMP GPS
+              </button>
+              <div id="clockInStatus" class="text-[11px] text-emerald-700 font-mono"></div>
+            </div>
+
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <span class="text-xs font-semibold block text-slate-700">Foto Clock Out:</span>
+              <input type="file" id="cameraClockOut" accept="image/*" capture="environment" class="text-xs w-full">
+              <button onclick="handleClockWithCamera('CHECK_OUT')" class="w-full min-h-[44px] bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold">
+                CLOCK OUT + STAMP GPS
+              </button>
+              <div id="clockOutStatus" class="text-[11px] text-emerald-700 font-mono"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Langkah 3: Form RCA & Progress CM -->
+        <div class="space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Langkah 3: Laporan Diagnostik &amp; RCA (Auto-Save Offline)</span>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <input id="techIssueDetail" placeholder="Detail Issue (Wajib)" class="text-xs border border-slate-300 rounded-lg p-2.5">
+            <input id="techRca1" placeholder="RCA 1 (Wajib)" class="text-xs border border-slate-300 rounded-lg p-2.5">
+            <input id="techRca2" placeholder="RCA 2 (Wajib)" class="text-xs border border-slate-300 rounded-lg p-2.5">
+          </div>
+          <textarea id="techCorrective" rows="2" placeholder="Tindakan Perbaikan (Corrective Action - Wajib)" class="w-full text-xs border border-slate-300 rounded-lg p-2.5"></textarea>
+          <input id="techReport" placeholder="Ringkasan Laporan Hasil Pekerjaan" class="w-full text-xs border border-slate-300 rounded-lg p-2.5">
+        </div>
+
+        <!-- Tombol Submit -->
+        <div class="pt-3 border-t border-slate-200 flex justify-end gap-2.5">
+          <button onclick="saveOfflineDraft()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">
+            Simpan Draft Lokal
+          </button>
+          <button onclick="handleTechAction('SUBMIT')" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md">
+            SUBMIT UNTUK REVIEW KOORDINATOR
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VIEW 5: PETA GIS BSS INDONESIA ================= -->
+    <div id="view_map" class="space-y-6 hidden">
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+            <span>🗺️</span> Peta Geografis (GIS) Stasiun BSS Indonesia
+          </h3>
+          <p class="text-xs text-slate-500">
+            Sebaran stasiun swap baterai dengan status operasional real-time dan panduan rute navigasi
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <select id="mapFilterProvince" onchange="renderMapMarkers()" class="text-xs border border-slate-300 rounded-lg p-2"></select>
+          <select id="mapFilterStatus" onchange="renderMapMarkers()" class="text-xs border border-slate-300 rounded-lg p-2">
+            <option value="ALL">Semua Status</option>
+            <option value="AVAILABLE">Available</option>
+            <option value="UNAVAILABLE">Unavailable</option>
+            <option value="FAULTED">Faulted</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs relative">
+          <div id="leafletMap" class="w-full h-[520px]"></div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+          <div id="mapSelectedStationDetails">
+            <span class="text-[10px] font-bold uppercase text-slate-400 block mb-2">Detail Stasiun</span>
+            <h4 id="mapDetailName" class="font-bold text-base text-slate-900">Klik salah satu pin</h4>
+            <p id="mapDetailAddress" class="text-xs text-slate-500 mt-1">-</p>
+            <div id="mapDetailProps" class="mt-4 p-3 bg-slate-50 rounded-xl space-y-1.5 text-xs text-slate-700"></div>
+            <a id="mapRouteLink" href="#" target="_blank" class="mt-4 w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-xs hidden">
+              Buka Rute di Google Maps ↗
+            </a>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100">
+            <span class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Daftar Stasiun</span>
+            <div id="mapStationList" class="space-y-1 max-h-[160px] overflow-y-auto pr-1 text-xs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VIEW 6: CHECKLIST PM (13 PM CHECKLIST) ================= -->
+    <div id="view_pm" class="space-y-6 hidden">
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <h3 class="font-bold text-sm text-slate-900 mb-1">Formulir Inspeksi Checklist PM (10 Item)</h3>
+        <p class="text-xs text-slate-500 mb-4">Inspeksi fisik, kelistrikan, dan keselamatan kabinet BSS dengan status OK / NG / NA.</p>
+        <div id="pmChecklistItems" class="space-y-3"></div>
+        <div class="mt-5 flex justify-end">
+          <button onclick="savePMChecklist()" class="px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm">
+            Simpan Hasil Checklist PM
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Global State
+    let currentUser = { role: 'Coordinator', name: 'Hartono', email: 'admin@clx.co.id', mitra: '' };
+    let unassignedTTs = [];
+    let allTasks = [];
+    let allSites = [];
+    let selectedTTs = [];
+    let leafletMapInstance = null;
+    let mapMarkers = [];
+
+    const $ = id => document.getElementById(id);
+
+    // Call Google Apps Script backend or fallback gracefully
+    function callServer(funcName, arg, callback) {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        setStatus('Memproses: ' + funcName + '…', 'busy');
+        google.script.run
+          .withSuccessHandler(res => {
+            setStatus('Selesai: ' + funcName, 'success');
+            if (callback) callback(res);
+          })
+          .withFailureHandler(err => {
+            setStatus('Gagal: ' + (err.message || err), 'error');
+            console.error(err);
+          })[funcName](arg);
+      } else {
+        console.warn('Mode simulasi (tanpa google.script.run)');
+        if (callback) callback(null);
+      }
+    }
+
+    function setStatus(text, type = 'success') {
+      const el = $('statusText');
+      if (el) el.textContent = text;
+      const box = $('statusMsg');
+      if (box) {
+        box.className = 'p-3 text-xs rounded-xl flex items-center justify-between ' + 
+          (type === 'busy' ? 'bg-amber-50 text-amber-800 border-amber-200' : 
+           type === 'error' ? 'bg-red-50 text-red-800 border-red-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200');
+      }
+      $('statusTime').textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Role-Based Navigation & Tabs
+    function setupRoleUI(user) {
+      currentUser = user;
+      $('userName').textContent = user.name || user.email;
+      $('userRoleLine').textContent = 'ROLE: ' + (user.role || 'GUEST').toUpperCase();
+      $('bannerUserName').textContent = user.name || user.email;
+      $('bannerUserEmail').textContent = user.email + (user.mitra ? ' · Mitra: ' + user.mitra : '');
+      $('bannerRoleTag').textContent = 'ROLE: ' + user.role.toUpperCase();
+
+      const isCoord = user.role === 'Coordinator' || user.role === 'Admin';
+      const isMitra = user.role === 'Mitra';
+      const isTech = user.role === 'Technician';
+
+      // Update Header Links
+      const headerNav = $('headerNav');
+      const subTabs = $('subTabs');
+      headerNav.innerHTML = '';
+      subTabs.innerHTML = '';
+
+      let tabs = [];
+      if (isCoord) {
+        tabs = [
+          { id: 'coord', label: 'Konsol Koordinator (TT & Upload)', icon: '🛡️' },
+          { id: 'dashboard', label: 'Monitoring & KPI Global', icon: '📊' },
+          { id: 'map', label: 'Peta GIS BSS Indonesia', icon: '🗺️' }
+        ];
+        $('bannerPermissions').textContent = 'Akses: Upload Customer, TT Queue, Bulk WA, Review Task Lapangan';
+      } else if (isMitra) {
+        tabs = [
+          { id: 'mitra', label: 'Portal Mitra (' + (user.mitra || 'Team') + ')', icon: '👥' },
+          { id: 'map', label: 'Peta GIS BSS Indonesia', icon: '🗺️' }
+        ];
+        $('bannerPermissions').textContent = 'Akses: Dashboard Mitra, Alokasi Teknisi, PM Mandiri';
+      } else if (isTech) {
+        tabs = [
+          { id: 'tech', label: 'Task Lapangan Saya', icon: '👷' },
+          { id: 'pm', label: 'Form Checklist PM', icon: '✅' },
+          { id: 'map', label: 'Peta GIS BSS Indonesia', icon: '🗺️' }
+        ];
+        $('bannerPermissions').textContent = 'Akses: Task Saya, GPS Clock In/Out, Progress CM, Checklist PM';
+      }
+
+      tabs.forEach((t, i) => {
+        // Header Nav
+        const hBtn = document.createElement('button');
+        hBtn.className = 'hover:text-white transition-colors whitespace-nowrap py-1';
+        hBtn.textContent = t.label;
+        hBtn.onclick = () => switchTab(t.id);
+        headerNav.appendChild(hBtn);
+
+        // Sub Tabs
+        const sBtn = document.createElement('button');
+        sBtn.id = 'tab_btn_' + t.id;
+        sBtn.className = 'flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ' + 
+          (i === 0 ? 'bg-[#091a2e] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100');
+        sBtn.innerHTML = `<span>${t.icon}</span> <span>${t.label}</span>`;
+        sBtn.onclick = () => switchTab(t.id);
+        subTabs.appendChild(sBtn);
+      });
+
+      // Open primary tab
+      switchTab(tabs[0]?.id || 'dashboard');
+    }
+
+    function switchTab(tabId) {
+      ['coord', 'dashboard', 'mitra', 'tech', 'map', 'pm'].forEach(id => {
+        const view = $('view_' + id);
+        if (view) view.classList.add('hidden');
+        const btn = $('tab_btn_' + id);
+        if (btn) btn.className = 'flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-100';
+      });
+
+      const activeView = $('view_' + tabId);
+      if (activeView) activeView.classList.remove('hidden');
+
+      const activeBtn = $('tab_btn_' + tabId);
+      if (activeBtn) activeBtn.className = 'flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-[#091a2e] text-white shadow-xs';
+
+      if (tabId === 'map') {
+        setTimeout(initMap, 200);
+      }
+    }
+
+    // Load initial data
+    function refreshData() {
+      callServer('getMyContext', null, user => {
+        if (user) setupRoleUI(user);
+        loadUnassignedTT();
+        loadTasks();
+        loadMitraOptions();
+        loadPMCandidates();
+      });
+    }
+
+    // TT Queue
+    function loadUnassignedTT() {
+      callServer('coordinatorTTQueue', null, data => {
+        unassignedTTs = Array.isArray(data) ? data : [];
+        $('ttCountBadge').textContent = unassignedTTs.length;
+        renderTTTable();
+      });
+    }
+
+    function renderTTTable() {
+      const tbody = $('unassignedRows');
+      if (!unassignedTTs.length) {
+        tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-slate-400">Tidak ada Trouble Ticket outstanding yang belum di-assign.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = unassignedTTs.map((tt, i) => {
+        return `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="p-3"><input type="checkbox" class="tt-check" data-id="${tt.ttId}" onchange="updateSelectedTT()"></td>
+            <td class="p-3 font-mono font-bold text-slate-900">${tt.ttId}</td>
+            <td class="p-3 font-semibold text-slate-900">${tt.site || '-'}</td>
+            <td class="p-3 font-mono text-slate-500">${tt.cabinet || '-'}</td>
+            <td class="p-3 text-slate-700 max-w-xs truncate">${tt.issue || '-'}</td>
+            <td class="p-3 font-bold ${tt.priority === 'Priority 1' ? 'text-red-600' : 'text-amber-600'}">${tt.priority || 'Priority 2'}</td>
+            <td class="p-3 font-mono font-semibold text-emerald-700">SLA 12 Jam</td>
+            <td class="p-3 font-medium">${tt.mitra || 'Belum mapped'}</td>
+            <td class="p-3 text-right">
+              <button onclick="assignSingleTT('${tt.ttId}', '${tt.mitra || ''}')" class="px-2.5 py-1 bg-slate-900 text-white rounded text-[11px] font-bold hover:bg-slate-800">
+                Assign
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateSelectedTT() {
+      const checked = [...document.querySelectorAll('.tt-check:checked')].map(c => c.dataset.id);
+      selectedTTs = checked;
+      $('selectedTTCount').textContent = checked.length;
+    }
+
+    function toggleSelectAllTT(check) {
+      document.querySelectorAll('.tt-check').forEach(c => c.checked = check);
+      updateSelectedTT();
+    }
+
+    function assignSingleTT(ttId, defaultMitra) {
+      const mitra = prompt('Masukkan nama Mitra penugasan:', defaultMitra || 'PT MITRA JAYA PERSADA');
+      if (!mitra) return;
+      callServer('coordinatorAssignTT', { ttId, mitra }, res => {
+        alert('TT berhasil ditugaskan ke ' + mitra);
+        refreshData();
+      });
+    }
+
+    function handleBulkAssignTT() {
+      if (!selectedTTs.length) return alert('Pilih minimal 1 TT');
+      if (!confirm('Assign ' + selectedTTs.length + ' TT terpilih ke Mitra sesuai mapping?')) return;
+      const items = selectedTTs.map(id => {
+        const t = unassignedTTs.find(x => x.ttId === id);
+        return { ttId: id, mitra: t?.mitra || 'PT MITRA JAYA PERSADA' };
+      });
+      callServer('coordinatorBulkAssignTT', { items }, res => {
+        alert('Bulk Assign selesai!');
+        refreshData();
+      });
+    }
+
+    // Bulk WhatsApp
+    function loadMitraOptions() {
+      callServer('getMitraOptions', null, list => {
+        const sel = $('waMitraSelect');
+        if (!sel || !Array.isArray(list)) return;
+        sel.innerHTML = list.map(m => `<option value="${m}">${m}</option>`).join('');
+      });
+    }
+
+    function generateWhatsApp() {
+      const mitra = $('waMitraSelect').value;
+      if (!mitra) return alert('Pilih mitra');
+      callServer('generateBulkWhatsApp', mitra, res => {
+        if (res && res.message) {
+          $('waText').value = res.message;
+          const link = $('waDirectLink');
+          link.href = 'https://wa.me/?text=' + encodeURIComponent(res.message);
+          link.classList.remove('hidden');
+        }
+      });
+    }
+
+    function copyWAText() {
+      const t = $('waText').value;
+      if (!t) return alert('Tidak ada teks untuk disalin');
+      navigator.clipboard.writeText(t);
+      alert('Teks WhatsApp berhasil disalin ke clipboard');
+    }
+
+    // Upload Customer File
+    function handleUploadExcel() {
+      const fileInput = $('excelFile');
+      const file = fileInput.files[0];
+      if (!file) return alert('Pilih file Excel terlebih dahulu');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const b64 = e.target.result.split(',')[1];
+        setStatus('Mengunggah & merekonsiliasi file…', 'busy');
+        callServer('uploadCustomerFile', { name: file.name, mimeType: file.type, data: b64 }, res => {
+          $('uploadResult').textContent = 'File diterima. Memproses batch ' + res.batch + '…';
+          $('uploadResult').classList.remove('hidden');
+          callServer('processBSSUpload', res.batch, out => {
+            alert('Rekonsiliasi selesai: ' + JSON.stringify(out));
+            refreshData();
+          });
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Tasks & Review
+    function loadTasks() {
+      callServer('myTaskList', null, tasks => {
+        allTasks = Array.isArray(tasks) ? tasks : [];
+        renderReviewRows();
+        renderMitraTaskRows();
+        renderTechTasks();
+      });
+    }
+
+    function renderReviewRows() {
+      const tbody = $('reviewRows');
+      if (!tbody) return;
+      const reviewable = allTasks.filter(t => t.Status === 'COMPLETED_WAITING_REVIEW');
+      if (!reviewable.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">Tidak ada task yang menunggu review saat ini.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = reviewable.map(t => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-3 font-mono font-bold">${t['Task ID']}</td>
+          <td class="p-3">${t['Task Type']}</td>
+          <td class="p-3 font-semibold">${t['Site Name']}</td>
+          <td class="p-3">${t['Mitra/Team']} · ${t['Technician Name']}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">${t.Status}</span></td>
+          <td class="p-3 text-slate-600">${t['Report Summary'] || '-'}<br><a href="${t['Check In Evidence URL'] || '#'}" target="_blank" class="text-emerald-600 underline text-[10px]">Bukti Clock In</a></td>
+          <td class="p-3 text-right space-x-1">
+            <button onclick="reviewTask('${t['Task ID']}', 'APPROVE')" class="px-2.5 py-1 bg-emerald-600 text-white rounded text-[11px] font-bold">Approve</button>
+            <button onclick="reviewTask('${t['Task ID']}', 'REWORK')" class="px-2.5 py-1 bg-amber-500 text-white rounded text-[11px] font-bold">Rework</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function reviewTask(taskId, decision) {
+      let remarks = '';
+      if (decision === 'REWORK') {
+        remarks = prompt('Instruksi perbaikan (rework) untuk teknisi:');
+        if (!remarks) return;
+      } else if (!confirm('Setujui laporan dan tutup task ' + taskId + '?')) {
+        return;
+      }
+      callServer('coordinatorReviewTask', { taskId, decision, remarks }, () => {
+        alert('Review tersimpan: ' + decision);
+        refreshData();
+      });
+    }
+
+    // Leaflet GIS Map
+    const SAMPLE_SITES = [
+      { name: 'SPBU Pertamina Thamrin', lat: -6.1925, lng: 106.8228, status: 'AVAILABLE', province: 'DKI Jakarta', cabinet: 'CAB-JKT-001' },
+      { name: 'SPBU Sudirman 31-10202', lat: -6.2238, lng: 106.8089, status: 'UNAVAILABLE', province: 'DKI Jakarta', cabinet: 'CAB-JKT-002' },
+      { name: 'Indomaret Point The Breeze BSD', lat: -6.3021, lng: 106.6534, status: 'FAULTED', province: 'Banten', cabinet: 'CAB-TNG-003' },
+      { name: 'Alfidi Dago Simpang Bandung', lat: -6.8856, lng: 107.6139, status: 'AVAILABLE', province: 'Jawa Barat', cabinet: 'CAB-BDG-004' },
+      { name: 'Halte BSS Asia Afrika Bandung', lat: -6.9215, lng: 107.6098, status: 'UNAVAILABLE', province: 'Jawa Barat', cabinet: 'CAB-BDG-005' },
+      { name: 'SPBU Basuki Rahmat Surabaya', lat: -7.2657, lng: 112.7423, status: 'AVAILABLE', province: 'Jawa Timur', cabinet: 'CAB-SBY-006' },
+      { name: 'Sunset Road Hub Kuta Bali', lat: -8.7012, lng: 115.1764, status: 'AVAILABLE', province: 'Bali', cabinet: 'CAB-DPS-007' }
+    ];
+
+    function initMap() {
+      if (leafletMapInstance) {
+        leafletMapInstance.invalidateSize();
+        return;
+      }
+      leafletMapInstance = L.map('leafletMap').setView([-6.5, 107.5], 7);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap · CLX BSS OMS'
+      }).addTo(leafletMapInstance);
+
+      // Populate province dropdown
+      const provs = Array.from(new Set(SAMPLE_SITES.map(s => s.province))).sort();
+      $('mapFilterProvince').innerHTML = '<option value="ALL">Semua Provinsi</option>' + provs.map(p => `<option value="${p}">${p}</option>`).join('');
+
+      renderMapMarkers();
+    }
+
+    function renderMapMarkers() {
+      if (!leafletMapInstance) return;
+      mapMarkers.forEach(m => m.remove());
+      mapMarkers = [];
+
+      const prov = $('mapFilterProvince').value;
+      const stat = $('mapFilterStatus').value;
+
+      const filtered = SAMPLE_SITES.filter(s => {
+        if (prov !== 'ALL' && s.province !== prov) return false;
+        if (stat !== 'ALL' && s.status !== stat) return false;
+        return true;
+      });
+
+      filtered.forEach(s => {
+        const color = s.status === 'AVAILABLE' ? '#059669' : s.status === 'UNAVAILABLE' ? '#dc2626' : '#d97706';
+        const icon = L.divIcon({
+          className: 'custom-bss-marker',
+          html: `<div class="custom-pin" style="background-color: ${color};"><div class="custom-pin-inner"></div></div>`,
+          iconSize: [24, 24],
+          iconAnchor: [12, 24]
+        });
+
+        const marker = L.marker([s.lat, s.lng], { icon }).addTo(leafletMapInstance);
+        marker.on('click', () => selectStationDetail(s));
+        mapMarkers.push(marker);
+      });
+
+      // Populate sidebar list
+      $('mapStationList').innerHTML = filtered.map(s => `
+        <div onclick="panToSite(${s.lat}, ${s.lng})" class="p-2 rounded bg-slate-50 hover:bg-slate-100 cursor-pointer flex justify-between items-center">
+          <span class="font-semibold truncate">${s.name}</span>
+          <span class="w-2 h-2 rounded-full ${s.status === 'AVAILABLE' ? 'bg-emerald-500' : s.status === 'UNAVAILABLE' ? 'bg-red-500' : 'bg-amber-500'}"></span>
+        </div>
+      `).join('');
+    }
+
+    function selectStationDetail(s) {
+      $('mapDetailName').textContent = s.name;
+      $('mapDetailAddress').textContent = s.province + ' · Cabinet: ' + s.cabinet;
+      $('mapDetailProps').innerHTML = `
+        <div>Status: <b>${s.status}</b></div>
+        <div>Koordinat: <b>${s.lat}, ${s.lng}</b></div>
+      `;
+      const link = $('mapRouteLink');
+      link.href = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`;
+      link.classList.remove('hidden');
+    }
+
+    function panToSite(lat, lng) {
+      if (leafletMapInstance) leafletMapInstance.flyTo([lat, lng], 13);
+    }
+
+    // PM Checklist Items
+    const PM_ITEMS = [
+      'Pemeriksaan Fisik Kabinet & Kebersihan Luar',
+      'Kondisi Pintu Kabinet & Karet Seal Kedap Air',
+      'Pemeriksaan MCB Utama & Arrester Penangkal Petir',
+      'Pengukuran Tegangan Input PLN (220V) & Grounding',
+      'Fungsi Sistem Pemadam Api Otomatis & Sensor Asap',
+      'Kondisi Fisik Konektor Pin Slot Baterai',
+      'Fungsi Solenoid Lock & Sensor Kehadiran Baterai',
+      'Pemeriksaan Modul Pendingin (Cooling Fan)',
+      'Pemeriksaan Sinyal 4G, Kabel LAN & Antena Eksternal',
+      'Uji Swap Baterai Simulasi Melalui Layar HMI'
+    ];
+
+    let pmChecklistResults = {};
+
+    function renderPMChecklist() {
+      const container = $('pmChecklistItems');
+      if (!container) return;
+      container.innerHTML = PM_ITEMS.map((item, idx) => {
+        const val = pmChecklistResults[idx] || 'OK';
+        return `
+          <div class="p-3 border border-slate-200 rounded-xl flex items-center justify-between gap-3 bg-slate-50">
+            <span class="text-xs font-semibold text-slate-800">${idx + 1}. ${item}</span>
+            <div class="flex gap-1 shrink-0">
+              <button onclick="setPMCheckItem(${idx}, 'OK')" class="px-2.5 py-1 rounded text-xs font-bold ${val === 'OK' ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-700'}">OK</button>
+              <button onclick="setPMCheckItem(${idx}, 'NG')" class="px-2.5 py-1 rounded text-xs font-bold ${val === 'NG' ? 'bg-red-600 text-white' : 'bg-slate-200 text-slate-700'}">NG</button>
+              <button onclick="setPMCheckItem(${idx}, 'NA')" class="px-2.5 py-1 rounded text-xs font-bold ${val === 'NA' ? 'bg-slate-700 text-white' : 'bg-slate-200 text-slate-700'}">NA</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setPMCheckItem(idx, val) {
+      pmChecklistResults[idx] = val;
+      renderPMChecklist();
+    }
+
+    function savePMChecklist() {
+      const taskId = selectedTechTask ? selectedTechTask['Task ID'] : 'TASK-PM-DEMO';
+      const results = PM_ITEMS.map((item, idx) => ({
+        item,
+        result: pmChecklistResults[idx] || 'OK',
+        remarks: 'Pemeriksaan rutin'
+      }));
+      callServer('technicianSavePMChecklist', { taskId, items: results }, () => {
+        alert('Hasil audit PM Checklist berhasil disimpan ke 13 PM CHECKLIST!');
+      });
+    }
+
+    // Mitra & Technician Implementation
+    function renderMitraTaskRows() {
+      const tbody = $('mitraTaskRows');
+      if (!tbody) return;
+      const myMitraTasks = allTasks.filter(t => !currentUser.mitra || String(t['Mitra/Team']).toUpperCase() === String(currentUser.mitra).toUpperCase());
+      if (!myMitraTasks.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada task untuk mitra ini.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = myMitraTasks.map(t => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-3 font-mono font-bold">${t['Task ID']}</td>
+          <td class="p-3">${t['Task Type']}</td>
+          <td class="p-3 font-semibold">${t['Site Name']}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100">${t.Status}</span></td>
+          <td class="p-3">
+            <input id="techEmail_${t['Task ID']}" placeholder="email teknisi..." value="${t['Technician Email'] || ''}" class="text-xs border p-1.5 rounded w-44">
+          </td>
+          <td class="p-3 text-right">
+            <button onclick="assignTaskToTech('${t['Task ID']}')" class="px-3 py-1 bg-sky-600 text-white rounded text-xs font-bold hover:bg-sky-700">Tugaskan</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function assignTaskToTech(taskId) {
+      const emailInput = $('techEmail_' + taskId);
+      const email = emailInput ? emailInput.value.trim() : '';
+      if (!email) return alert('Masukkan email Google teknisi');
+      callServer('mitraAssignTaskToTech', { taskId, techEmail: email }, () => {
+        alert('Task berhasil dialokasikan ke teknisi ' + email);
+        refreshData();
+      });
+    }
+
+    function handleRegisterTech() {
+      const name = $('newTechName').value.trim();
+      const email = $('newTechEmail').value.trim();
+      if (!name || !email) return alert('Nama dan email teknisi wajib diisi');
+      callServer('mitraRegisterTech', { name, email }, () => {
+        alert('Teknisi ' + name + ' berhasil didaftarkan di User Master!');
+        $('newTechName').value = '';
+        $('newTechEmail').value = '';
+        refreshData();
+      });
+    }
+
+    let selectedTechTask = null;
+
+    function renderTechTasks() {
+      const container = $('techTaskCards');
+      if (!container) return;
+      const myTasks = allTasks.filter(t => !currentUser.email || (t['Technician Email'] && t['Technician Email'].toLowerCase() === currentUser.email.toLowerCase()));
+      if (!myTasks.length) {
+        container.innerHTML = '<div class="col-span-full p-4 text-center text-slate-400 bg-slate-50 rounded-lg">Tidak ada task yang ditugaskan ke Anda saat ini.</div>';
+        return;
+      }
+      container.innerHTML = myTasks.map(t => `
+        <div onclick="selectTechTask('${t['Task ID']}')" class="p-3.5 rounded-xl border border-slate-200 hover:border-emerald-500 cursor-pointer bg-white transition-all shadow-xs ${selectedTechTask?.['Task ID'] === t['Task ID'] ? 'ring-2 ring-emerald-500 bg-emerald-50/30' : ''}">
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="font-mono font-bold text-slate-900">${t['Task ID']}</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${t.Status === 'ASSIGNED' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${t.Status}</span>
+          </div>
+          <div class="font-bold text-xs text-slate-800 truncate">${t['Site Name']}</div>
+          <div class="text-[11px] text-slate-500 mt-1">${t['Task Type']} · ${t['Cabinet S/N'] || '-'}</div>
+        </div>
+      `).join('');
+      if (!selectedTechTask && myTasks.length > 0) {
+        selectTechTask(myTasks[0]['Task ID']);
+      }
+    }
+
+    function selectTechTask(taskId) {
+      selectedTechTask = allTasks.find(t => t['Task ID'] === taskId);
+      if (!selectedTechTask) return;
+      $('techSelectedTaskId').textContent = selectedTechTask['Task ID'];
+      $('techSelectedSiteName').textContent = selectedTechTask['Site Name'] + ' (' + selectedTechTask['Task Type'] + ')';
+      $('techSelectedStatus').textContent = selectedTechTask.Status;
+
+      // Restore draft from localStorage if available
+      const draft = localStorage.getItem('draft_' + taskId);
+      if (draft) {
+        try {
+          const d = JSON.parse(draft);
+          $('techIssueDetail').value = d.issue || '';
+          $('techRca1').value = d.rca1 || '';
+          $('techRca2').value = d.rca2 || '';
+          $('techCorrective').value = d.corrective || '';
+          $('techReport').value = d.report || '';
+        } catch(e) {}
+      }
+    }
+
+    function handleClockWithCamera(type) {
+      if (!selectedTechTask) return alert('Pilih task terlebih dahulu');
+      const input = type === 'CHECK_IN' ? $('cameraClockIn') : $('cameraClockOut');
+      const file = input.files[0];
+      if (!file) return alert('Ambil foto dari kamera terlebih dahulu');
+
+      if (!navigator.geolocation) {
+        return alert('Browser / HP tidak mendukung deteksi GPS');
+      }
+
+      setStatus('Mendeteksi GPS & membubuhkan stempel foto…', 'busy');
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude.toFixed(6);
+        const lon = pos.coords.longitude.toFixed(6);
+        const timeStr = new Date().toLocaleString('id-ID');
+
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            const bannerHeight = Math.max(90, img.height * 0.12);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, img.height - bannerHeight, img.width, bannerHeight);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${Math.round(bannerHeight * 0.28)}px monospace`;
+            ctx.fillText(`CLX BSS OMS · ${type} · TASK: ${selectedTechTask['Task ID']}`, 20, img.height - bannerHeight * 0.6);
+            ctx.fillText(`GPS: ${lat}, ${lon} · WAKTU: ${timeStr}`, 20, img.height - bannerHeight * 0.2);
+
+            const watermarkedB64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+            callServer('technicianUploadEvidence', {
+              taskId: selectedTechTask['Task ID'],
+              type: type === 'CHECK_IN' ? 'CLOCK_IN' : 'CLOCK_OUT',
+              data: watermarkedB64,
+              lat, lon
+            }, () => {
+              if (type === 'CHECK_IN') {
+                $('clockInStatus').textContent = `✓ Clock In tersimpan (${lat}, ${lon})`;
+              } else {
+                $('clockOutStatus').textContent = `✓ Clock Out tersimpan (${lat}, ${lon})`;
+              }
+              alert(`Sukses: Bukti foto ${type} dengan stempel GPS berhasil disimpan ke 11 WORK EVIDENCE!`);
+              refreshData();
+            });
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }, err => {
+        alert('Gagal mendeteksi koordinat GPS: ' + err.message);
+      }, { enableHighAccuracy: true });
+    }
+
+    function saveOfflineDraft() {
+      if (!selectedTechTask) return alert('Pilih task terlebih dahulu');
+      const d = {
+        issue: $('techIssueDetail').value,
+        rca1: $('techRca1').value,
+        rca2: $('techRca2').value,
+        corrective: $('techCorrective').value,
+        report: $('techReport').value,
+        updatedAt: new Date().toISOString()
+      };
+      localStorage.setItem('draft_' + selectedTechTask['Task ID'], JSON.stringify(d));
+      alert('Draft laporan berhasil disimpan di LocalStorage HP / Browser Anda.');
+    }
+
+    function handleTechAction(action) {
+      if (!selectedTechTask) return alert('Pilih task terlebih dahulu');
+      const taskId = selectedTechTask['Task ID'];
+
+      if (action === 'ACCEPT' || action === 'ON_THE_WAY') {
+        callServer('technicianUpdateStatus', { taskId, action }, () => {
+          alert('Status task diperbarui: ' + action);
+          refreshData();
+        });
+      } else if (action === 'SUBMIT') {
+        const issue = $('techIssueDetail').value.trim();
+        const rca1 = $('techRca1').value.trim();
+        const corrective = $('techCorrective').value.trim();
+        const report = $('techReport').value.trim();
+        if (!issue || !rca1 || !corrective) {
+          return alert('Lengkapi Detail Issue, RCA 1, dan Corrective Action sebelum submit.');
+        }
+        callServer('technicianSubmitTask', {
+          taskId,
+          issue,
+          rca1,
+          rca2: $('techRca2').value.trim(),
+          corrective,
+          report
+        }, () => {
+          localStorage.removeItem('draft_' + taskId);
+          alert('Laporan berhasil disubmit ke Koordinator untuk approval review.');
+          refreshData();
+        });
+      }
+    }
+
+    function loadPMCandidates() {
+      callServer('getPMCandidates', null, list => {
+        const coordTbody = $('coordPMRows');
+        const mitraTbody = $('mitraPMRows');
+        const items = Array.isArray(list) ? list : [];
+
+        if (coordTbody) {
+          coordTbody.innerHTML = items.length ? items.map(s => `
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-semibold">${s.siteName}</td>
+              <td class="p-3 font-mono">${s.cabinet}</td>
+              <td class="p-3 font-mono">${s.stationCode}</td>
+              <td class="p-3">${s.mitra || '-'}</td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${s.hasActivePM ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'}">${s.hasActivePM ? 'PM Aktif' : 'Belum PM'}</span></td>
+              <td class="p-3 text-right">
+                ${s.hasActivePM ? '<span class="text-xs text-slate-400">Sedang Berjalan</span>' : `<button onclick="startPMSite('${s.siteKey}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded text-[11px] font-bold">Start PM</button>`}
+              </td>
+            </tr>
+          `).join('') : '<tr><td colspan="6" class="p-4 text-center text-slate-400">Tidak ada site untuk PM siklus ini.</td></tr>';
+        }
+
+        if (mitraTbody) {
+          const myMitraSites = items.filter(s => !currentUser.mitra || String(s.mitra).toUpperCase() === String(currentUser.mitra).toUpperCase());
+          mitraTbody.innerHTML = myMitraSites.length ? myMitraSites.map(s => `
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-semibold">${s.siteName}</td>
+              <td class="p-3 font-mono">${s.cabinet}</td>
+              <td class="p-3 font-mono">${s.stationCode}</td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Operational</span></td>
+              <td class="p-3 text-right">
+                <button onclick="startPMSite('${s.siteKey}')" class="px-2.5 py-1 bg-sky-600 text-white rounded text-[11px] font-bold">Mulai PM Mandiri</button>
+              </td>
+            </tr>
+          `).join('') : '<tr><td colspan="5" class="p-4 text-center text-slate-400">Tidak ada site terpetakan.</td></tr>';
+        }
+      });
+    }
+
+    function startPMSite(siteKey) {
+      if (!confirm('Mulai penugasan PM untuk site ini?')) return;
+      callServer('coordinatorStartPM', { siteKey }, () => {
+        alert('Penugasan PM berhasil dibuat!');
+        refreshData();
+      });
+    }
+
+    // Initial run on load
+    window.addEventListener('load', () => {
+      refreshData();
+      renderPMChecklist();
+    });
+  </script>
+</body>
+</html>
